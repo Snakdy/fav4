@@ -1,0 +1,10 @@
+functions:build:
+  extends: .serverless:build:functions
+  environment: production
+
+functions:deploy:
+  extends: .serverless:deploy:functions
+  environment: production
+
+include:
+  - template: Serverless.gitlab-ci.yml

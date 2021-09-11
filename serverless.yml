@@ -1,0 +1,12 @@
+service: fav3
+description: Favicon loader
+
+provider:
+  name: gitlab/knative
+
+functions:
+  icon:
+    handler: run
+    runtime: gitlab/runtimes/go
+    description: "fetches an icon"
+    source: .
