@@ -1,12 +1,16 @@
 functions:build:
   extends: .serverless:build:functions
-  environment: production
+  environment:
+    name: production
+    action: prepare
   needs: []
   dependencies: []
 
 functions:deploy:
   extends: .serverless:deploy:functions
-  environment: production
+  environment:
+    name: production
+    action: start
   dependencies: []
   needs:
     - "functions:build"
