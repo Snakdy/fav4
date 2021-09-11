@@ -1,10 +1,15 @@
 functions:build:
   extends: .serverless:build:functions
   environment: production
+  needs: []
+  dependencies: []
 
 functions:deploy:
   extends: .serverless:deploy:functions
   environment: production
+  dependencies: []
+  needs:
+    - "functions:build"
 
 include:
   - template: Serverless.gitlab-ci.yml
