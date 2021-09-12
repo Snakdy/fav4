@@ -1,2 +1,3 @@
 args:
   request: "cpu=100m,memory=128Mi"
+  annotation-service: "serving.knative.dev/rolloutDuration=60s"
