@@ -1,6 +1,7 @@
 stages:
   - build
   - predeploy
+  - deploy
 
 build:
   stage: build
@@ -16,6 +17,7 @@ container-scanning:
 
 deploy:
   dependencies: []
+  stage: deploy
   needs:
     - build
     - container-scanning
