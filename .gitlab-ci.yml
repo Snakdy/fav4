@@ -1,3 +1,6 @@
+variables:
+  AUTO_CNB_RUN_IMAGE: harbor.dcas.dev/docker.io/paketobuildpacks/run:tiny-cnb
+
 stages:
   - build
   - predeploy
@@ -5,9 +8,17 @@ stages:
 
 build:
   stage: build
-  needs: []
+  extends: .auto-build
   dependencies: []
-  extends: .img
+  needs: []
+  rules:
+    - if: '$CI_OPEN_MERGE_REQUESTS != null && $CI_PIPELINE_SOURCE == "push"'
+      when: never
+    - if: '$CI_COMMIT_TAG == null && $CI_COMMIT_BRANCH == null && $CI_OPEN_MERGE_REQUESTS == null'
+      when: never
+    - if: '$BUILD_DISABLED != null'
+      when: never
+    - when: on_success
 
 container-scanning:
   dependencies: []
@@ -38,4 +49,4 @@ deploy:
 
 include:
   - remote: "https://gitlab.com/av1o/gitlab-ci-templates/-/raw/master/defend/ContainerScanning.gitlab-ci.yml"
-  - remote: 'https://gitlab.com/av1o/gitlab-ci-templates/-/raw/master/build/Img.gitlab-ci.yml'
+  - remote: "https://gitlab.com/av1o/gitlab-ci-templates/-/raw/master/build/CNB.gitlab-ci.yml"
