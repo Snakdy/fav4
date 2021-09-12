@@ -1,18 +1,17 @@
 package main
 
 import (
-	log "github.com/sirupsen/logrus"
+	"github.com/djcass44/go-tracer/tracer"
 	"gitlab.com/autokubeops/serverless"
-	"gitlab.dcas.dev/open-source/fav3/pkg/routes"
+	"gitlab.dcas.dev/open-source/fav4/internal/api"
 	"net/http"
 )
 
 func main() {
-	route := routes.NewIconRoute(true)
-	serverless.NewBuilder(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Infof("%s %s %s %s [%s]", r.Method, r.URL.Path, r.UserAgent(), r.RemoteAddr, r.URL.Query().Get("site"))
+	route := api.NewIconAPI()
+	serverless.NewBuilder(tracer.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		route.ServeHTTP(w, r)
-	})).
+	}))).
 		WithPrometheus().
 		Run()
 }
