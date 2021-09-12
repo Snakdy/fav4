@@ -32,7 +32,7 @@ deploy:
   needs:
     - build
     - container-scanning
-  image: registry.gitlab.com/autokubeops/cuttle:v0.1
+  image: harbor.dcas.dev/registry.gitlab.com/autokubeops/cuttle:v0.1
   environment:
     name: production
     action: start
