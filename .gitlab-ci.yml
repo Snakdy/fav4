@@ -1,17 +1,39 @@
-functions:build:
-  extends: .serverless:build:functions
-  environment:
-    name: production
+stages:
+  - build
+  - predeploy
+
+build:
+  stage: build
   needs: []
   dependencies: []
+  extends: .img
 
-functions:deploy:
-  extends: .serverless:deploy:functions
-  environment:
-    name: production
+container-scanning:
   dependencies: []
   needs:
-    - "functions:build"
+    - build
+
+
+deploy:
+  dependencies: []
+  needs:
+    - build
+    - container-scanning
+  image: registry.gitlab.com/autokubeops/cuttle:v0.1
+  environment:
+    name: production
+    action: start
+  script:
+    - cuttle regcred
+    - cuttle function deploy
+  resource_group: production
+  rules:
+    - if: '$CI_KUBERNETES_ACTIVE == null || $CI_KUBERNETES_ACTIVE == ""'
+      when: never
+    - if: '$DEPLOY_DISABLED || $CI_DEPLOY_FREEZE'
+      when: never
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
 include:
-  - template: Serverless.gitlab-ci.yml
+  - remote: "https://gitlab.com/av1o/gitlab-ci-templates/-/raw/master/defend/ContainerScanning.gitlab-ci.yml"
+  - remote: 'https://gitlab.com/av1o/gitlab-ci-templates/-/raw/master/build/Img.gitlab-ci.yml'
