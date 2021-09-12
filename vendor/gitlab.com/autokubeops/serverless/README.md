@@ -20,9 +20,11 @@ import (
 )
 
 func main() {
-	serverless.Run(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	serverless.NewBuilder(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// put your application logic here
 		_, _ = w.Write([]byte("OK"))
-	}))
+	})).
+		WithPrometheus(). // enable prometheus metrics (optional)
+		Run()
 }
 ```

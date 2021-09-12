@@ -9,8 +9,10 @@ import (
 
 func main() {
 	route := routes.NewIconRoute(true)
-	serverless.Run(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	serverless.NewBuilder(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Infof("%s %s %s %s [%s]", r.Method, r.URL.Path, r.UserAgent(), r.RemoteAddr, r.URL.Query().Get("site"))
 		route.ServeHTTP(w, r)
-	}))
+	})).
+		WithPrometheus().
+		Run()
 }
