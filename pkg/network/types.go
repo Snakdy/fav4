@@ -1,7 +1,10 @@
 package network
 
-import "context"
+import (
+	"context"
+	"net/url"
+)
 
 type Loader interface {
-	Get(ctx context.Context, target string) string
+	Get(ctx context.Context, target *url.URL) (string, error)
 }

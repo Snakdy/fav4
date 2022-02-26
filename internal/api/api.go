@@ -11,18 +11,22 @@ import (
 )
 
 type IconAPI struct {
-	client *http.Client
-	direct *network.DirectLoader
+	client  *http.Client
+	loaders []network.Loader
 }
 
 func NewIconAPI() *IconAPI {
 	transport := http.DefaultTransport.(*http.Transport).Clone()
 	transport.TLSClientConfig.MinVersion = tls.VersionTLS13
+	transport.ForceAttemptHTTP2 = true
 	api := new(IconAPI)
 	api.client = &http.Client{
 		Transport: transport,
 	}
-	api.direct = network.NewDirectLoader(api.client)
+	api.loaders = []network.Loader{
+		network.NewDirectLoader(api.client),
+		network.NewHeadLoader(api.client),
+	}
 
 	return api
 }
@@ -30,11 +34,18 @@ func NewIconAPI() *IconAPI {
 func (api *IconAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Infof("%s %s %s %s [%s]", r.Method, r.URL.Path, r.UserAgent(), r.RemoteAddr, r.URL.Query().Get("site"))
 	target, err := api.parse(r.URL.Query().Get("site"))
-	if target == "" || err != nil {
+	if target == nil || err != nil {
 		http.Error(w, "failed to parse 'site' parameter", http.StatusBadRequest)
 		return
 	}
-	val := api.direct.Get(r.Context(), target)
+	var val string
+	for _, l := range api.loaders {
+		val, err = l.Get(r.Context(), target)
+		if err != nil {
+			continue
+		}
+		break
+	}
 	if val == "" {
 		http.NotFound(w, r)
 		return
@@ -42,9 +53,9 @@ func (api *IconAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	_ = network.Download(r.Context(), api.client, val, w)
 }
 
-func (*IconAPI) parse(s string) (string, error) {
+func (*IconAPI) parse(s string) (*url.URL, error) {
 	if s == "" {
-		return "", nil
+		return nil, nil
 	}
 	if !strings.HasPrefix(s, "http") {
 		s = fmt.Sprintf("https://%s", s)
@@ -52,7 +63,11 @@ func (*IconAPI) parse(s string) (string, error) {
 	uri, err := url.Parse(s)
 	if err != nil {
 		log.WithError(err).Error("failed to parse URI")
-		return "", err
+		return nil, err
 	}
-	return fmt.Sprintf("https://%s", uri.Host), nil
+	// only https
+	if uri.Scheme == "http" {
+		uri.Scheme = "https"
+	}
+	return uri, nil
 }

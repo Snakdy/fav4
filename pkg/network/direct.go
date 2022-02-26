@@ -6,6 +6,7 @@ import (
 	"github.com/djcass44/go-utils/pkg/httputils"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -22,21 +23,21 @@ func NewDirectLoader(client *http.Client) *DirectLoader {
 	}
 }
 
-func (dl *DirectLoader) Get(ctx context.Context, target string) string {
+func (dl *DirectLoader) Get(ctx context.Context, target *url.URL) (string, error) {
 	res := make(chan *string)
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 	for i := range imageMimes {
-		go dl.fetch(ctx, fmt.Sprintf("%s/favicon.%s", target, imageMimes[i]), res)
+		go dl.fetch(ctx, fmt.Sprintf("https://%s/favicon.%s", target.Host, imageMimes[i]), res)
 	}
 	for i := 0; i < len(imageMimes); i++ {
 		response := <-res
 		if response == nil {
 			continue
 		}
-		return *response
+		return *response, nil
 	}
-	return ""
+	return "", ErrNotFound
 }
 
 func (dl *DirectLoader) fetch(ctx context.Context, target string, res chan *string) {

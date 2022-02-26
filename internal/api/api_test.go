@@ -17,7 +17,7 @@ func TestIconAPI_parse(t *testing.T) {
 		{
 			"",
 			"",
-			false,
+			true,
 		},
 		{
 			"http://google.com",
@@ -31,7 +31,7 @@ func TestIconAPI_parse(t *testing.T) {
 		},
 		{
 			"foo.bar/foobar",
-			"https://foo.bar",
+			"https://foo.bar/foobar",
 			false,
 		},
 		{
@@ -44,7 +44,12 @@ func TestIconAPI_parse(t *testing.T) {
 	for _, tt := range cases {
 		t.Run(tt.in, func(t *testing.T) {
 			out, err := api.parse(tt.in)
-			assert.EqualValues(t, tt.out, out)
+			if tt.err {
+				assert.Nil(t, out)
+				return
+			}
+			assert.NotNil(t, out)
+			assert.EqualValues(t, tt.out, out.String())
 			assert.EqualValues(t, tt.err, err != nil)
 		})
 	}
