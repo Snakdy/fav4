@@ -30,6 +30,10 @@ func TestHeadLoader_Get(t *testing.T) {
 			must("https://kubernetes.io/docs"),
 			"https://kubernetes.io/images/favicon.png",
 		},
+		{
+			must("https://console.dcas.dev"),
+			"https://console.dcas.dev/static/assets/okd-favicon.png",
+		},
 	}
 
 	l := &HeadLoader{

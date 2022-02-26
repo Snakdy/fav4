@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -52,10 +53,13 @@ func (l *HeadLoader) Get(ctx context.Context, target *url.URL) (string, error) {
 	for _, line := range strings.Split(string(data), "\n") {
 		if strings.Contains(line, "favicon.") {
 			val := strings.TrimPrefix(strings.ReplaceAll(LineMatcherV2.FindString(line), `"`, ""), "href=")
-			if !strings.HasPrefix(val, "/") {
+			if strings.HasPrefix(val, "https://") {
 				return val, nil
 			}
-			return fmt.Sprintf("https://%s%s", target.Host, val), nil
+			if strings.HasPrefix(val, "/") {
+				return fmt.Sprintf("https://%s%s", target.Host, val), nil
+			}
+			return "https://" + filepath.Join(target.Host, val), nil
 		}
 	}
 	return "", ErrNotFound
