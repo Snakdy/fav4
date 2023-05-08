@@ -21,6 +21,8 @@ github.com/djcass44/go-utils v0.2.1-0.20210516001550-3d288882b7f4 h1:1JJm+Yy7Rug
 github.com/djcass44/go-utils v0.2.1-0.20210516001550-3d288882b7f4/go.mod h1:CNuC6Z+G2A89MnX/9Bq0R2AFhiu6Klg9udrkr0p6sOY=
 github.com/djcass44/go-utils/logging v0.2.3 h1:YVckUtxGy/4rU/43yOFUbZ5seIIuZPpNtZBJ53wDZjs=
 github.com/djcass44/go-utils/logging v0.2.3/go.mod h1:ev7vSFCymxXWwLdQ0+Aq1ZrW5iJSsWddJjDBmWVOvhw=
+github.com/djcass44/go-utils/utilities v0.1.1 h1:l1cZFmk0Ngz5L4zn6wIJcAi44Ny/M85sgWT5azFP0wY=
+github.com/djcass44/go-utils/utilities v0.1.1/go.mod h1:y6kOPPSb7171F8eyo5tyzOuhj5hUIVfyE/Yp94Tty6M=
 github.com/docker/go-units v0.5.0 h1:69rxXcBk27SvSaaxTtLh/8llcHD8vYHT7WSdRZ/jvr4=
 github.com/docker/go-units v0.5.0/go.mod h1:fgPhTUdO+D/Jk86RDLlptpiXQzgHJF7gydDDbaIK4Dk=
 github.com/felixge/httpsnoop v1.0.1/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=

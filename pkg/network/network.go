@@ -2,7 +2,7 @@ package network
 
 import (
 	"context"
-	"github.com/djcass44/go-utils/pkg/httputils"
+	"github.com/djcass44/go-utils/utilities/httputils"
 	"github.com/go-logr/logr"
 	"io"
 	"net/http"

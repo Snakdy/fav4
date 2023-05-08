@@ -3,9 +3,8 @@ module gitlab.dcas.dev/open-source/fav4
 go 1.20
 
 require (
-	github.com/djcass44/go-tracer v0.3.0
-	github.com/djcass44/go-utils v0.2.1-0.20210516001550-3d288882b7f4
 	github.com/djcass44/go-utils/logging v0.2.3
+	github.com/djcass44/go-utils/utilities v0.1.1
 	github.com/go-logr/logr v1.2.4
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/rs/cors v1.8.2
@@ -22,6 +21,8 @@ require (
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/djcass44/go-probe-lib v0.1.1 // indirect
+	github.com/djcass44/go-tracer v0.3.0 // indirect
+	github.com/djcass44/go-utils v0.2.1-0.20210516001550-3d288882b7f4 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect

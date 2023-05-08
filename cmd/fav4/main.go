@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"github.com/djcass44/go-tracer/tracer"
 	"github.com/djcass44/go-utils/logging"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/rs/cors"
@@ -29,7 +28,7 @@ func main() {
 
 	// start the server
 	route := api.NewIconAPI()
-	serverless.NewBuilder(tracer.NewHandler(cors.AllowAll().Handler(route))).
+	serverless.NewBuilder(cors.AllowAll().Handler(route)).
 		WithLogger(log).
 		WithPort(e.Port).
 		Run()
