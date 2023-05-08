@@ -1,5 +1,0 @@
-args:
-  request: "cpu=100m,memory=64Mi"
-  limit: "memory=128Mi"
-  annotation-service: "serving.knative.dev/rolloutDuration=60s"
-  autoscale-window: "60s"
