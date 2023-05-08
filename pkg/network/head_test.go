@@ -20,7 +20,7 @@ func TestHeadLoader_Get(t *testing.T) {
 	}{
 		{
 			must("https://rancher.com"),
-			"https://rancher.com/assets/img/favicon.png",
+			"https://www.rancher.com/assets/img/favicon.png",
 		},
 		{
 			must("https://rancher.com/docs"),

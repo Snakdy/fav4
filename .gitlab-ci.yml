@@ -1,5 +1,6 @@
 variables:
   AUTO_CNB_RUN_IMAGE: harbor.dcas.dev/docker.io/paketobuildpacks/run:tiny-cnb
+  DEPLOY_DISABLED: "true"
 
 include:
   - remote: "https://gitlab.com/av1o/gitlab-ci-templates/-/raw/master/serverless/Go.gitlab-ci.yml"

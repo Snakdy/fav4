@@ -1,9 +1,10 @@
 package api
 
 import (
+	"context"
 	"crypto/tls"
 	"fmt"
-	log "github.com/sirupsen/logrus"
+	"github.com/go-logr/logr"
 	"gitlab.dcas.dev/open-source/fav4/pkg/network"
 	"net/http"
 	"net/url"
@@ -32,9 +33,15 @@ func NewIconAPI() *IconAPI {
 }
 
 func (api *IconAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Infof("%s %s %s %s [%s]", r.Method, r.URL.Path, r.UserAgent(), r.RemoteAddr, r.URL.Query().Get("site"))
-	target, err := api.parse(r.URL.Query().Get("site"))
+	ctx := r.Context()
+	log := logr.FromContextOrDiscard(ctx)
+	log.Info("processing request", "site", r.URL.Query().Get("site"))
+	target, err := api.parse(ctx, r.URL.Query().Get("site"))
 	if target == nil || err != nil {
+		log.V(1).Info("missing site parameter")
+		if err != nil {
+			log.Error(err, "failed to parse 'site' parameter")
+		}
 		http.Error(w, "failed to parse 'site' parameter", http.StatusBadRequest)
 		return
 	}
@@ -53,7 +60,8 @@ func (api *IconAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	_ = network.Download(r.Context(), api.client, val, w)
 }
 
-func (*IconAPI) parse(s string) (*url.URL, error) {
+func (*IconAPI) parse(ctx context.Context, s string) (*url.URL, error) {
+	log := logr.FromContextOrDiscard(ctx).WithValues("str", s)
 	if s == "" {
 		return nil, nil
 	}
@@ -62,7 +70,7 @@ func (*IconAPI) parse(s string) (*url.URL, error) {
 	}
 	uri, err := url.Parse(s)
 	if err != nil {
-		log.WithError(err).Error("failed to parse URI")
+		log.Error(err, "failed to parse URI")
 		return nil, err
 	}
 	// only https

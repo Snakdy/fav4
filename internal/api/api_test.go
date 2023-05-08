@@ -1,6 +1,11 @@
 package api
 
-import "testing"
+import (
+	"context"
+	"github.com/go-logr/logr"
+	"github.com/go-logr/logr/testr"
+	"testing"
+)
 import "github.com/stretchr/testify/assert"
 
 func TestNewIconAPI(t *testing.T) {
@@ -9,6 +14,7 @@ func TestNewIconAPI(t *testing.T) {
 }
 
 func TestIconAPI_parse(t *testing.T) {
+	ctx := logr.NewContext(context.TODO(), testr.NewWithOptions(t, testr.Options{Verbosity: 10}))
 	var cases = []struct {
 		in  string
 		out string
@@ -43,7 +49,7 @@ func TestIconAPI_parse(t *testing.T) {
 	api := &IconAPI{}
 	for _, tt := range cases {
 		t.Run(tt.in, func(t *testing.T) {
-			out, err := api.parse(tt.in)
+			out, err := api.parse(ctx, tt.in)
 			if tt.err {
 				assert.Nil(t, out)
 				return
