@@ -1,3 +1,6 @@
+variables:
+  BUILD_GO_IMPORTPATH: "cmd/fav4"
+
 stages:
   - verify
   - test
