@@ -1,15 +1,11 @@
-variables:
-  BUILD_GO_IMPORTPATH: "cmd/fav4"
-
 stages:
   - verify
   - test
   - build
-  - scan
 
 include:
-  - remote: https://gitlab.com/av1o/gitlab-ci-templates/-/raw/v2/verify/Semgrep-Quality.gitlab-ci.yml
-  - remote: https://gitlab.com/av1o/gitlab-ci-templates/-/raw/v2/verify/CodeIntel.gitlab-ci.yml
-  - remote: https://gitlab.com/av1o/gitlab-ci-templates/-/raw/v2/test/Go-Test.gitlab-ci.yml
-  - remote: https://gitlab.com/av1o/gitlab-ci-templates/-/raw/v2/build/Go.gitlab-ci.yml
-  - remote: https://gitlab.com/av1o/gitlab-ci-templates/-/raw/v2/defend/Trivy.gitlab-ci.yml
+  - component: gitlab.dcas.dev/autodevops/components/semgrep@main
+  - component: gitlab.dcas.dev/autodevops/components/go-test@main
+  - component: gitlab.dcas.dev/autodevops/components/go-build@main
+    inputs:
+      importPath: cmd/fav4

@@ -24,7 +24,7 @@ func main() {
 	zc := zap.NewProductionConfig()
 	zc.Level = zap.NewAtomicLevelAt(zapcore.Level(e.LogLevel * -1))
 
-	log, _ := logging.NewZap(context.TODO(), zc)
+	log, _ := logging.NewZap(context.Background(), zc)
 
 	// start the server
 	route := api.NewIconAPI()
