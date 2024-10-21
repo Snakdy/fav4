@@ -1,4 +1,12 @@
 # FAV4
 
-FAV4 is the fourth iteration of the Favicon loading microservice.
-This version is functionally the same as FAV3, however it has simplified functionality and is designed to run as a Serverless function.
+FAV4 is a simple microservice for loading website favicons.
+
+## Usage
+
+The image has almost no configuration, so it's as simple as:
+
+```shell
+docker run -p 8080:8080 ghcr.io/snakdy/fav4:main
+curl http://localhost:8080/?site=https://github.com
+```

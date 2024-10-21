@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
+	"github.com/Snakdy/fav4/internal/api"
 	"github.com/djcass44/go-utils/logging"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/rs/cors"
 	"gitlab.com/autokubeops/serverless"
-	"gitlab.dcas.dev/open-source/fav4/internal/api"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

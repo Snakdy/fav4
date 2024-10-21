@@ -1,4 +1,4 @@
-module gitlab.dcas.dev/open-source/fav4
+module github.com/Snakdy/fav4
 
 go 1.22
 
