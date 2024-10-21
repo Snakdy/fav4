@@ -2,6 +2,8 @@ package network
 
 import (
 	"context"
+	"github.com/go-logr/logr"
+	"github.com/go-logr/logr/testr"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -14,6 +16,7 @@ func must(s string) *url.URL {
 }
 
 func TestHeadLoader_Get(t *testing.T) {
+	ctx := logr.NewContext(context.TODO(), testr.NewWithOptions(t, testr.Options{Verbosity: 10}))
 	var cases = []struct {
 		in  *url.URL
 		out string
@@ -28,7 +31,7 @@ func TestHeadLoader_Get(t *testing.T) {
 		},
 		{
 			must("https://kubernetes.io/docs"),
-			"https://kubernetes.io/images/favicon.png",
+			"https://kubernetes.io/icons/favicon-64.png",
 		},
 		{
 			must("https://console.io.dcas.dev"),
@@ -41,7 +44,7 @@ func TestHeadLoader_Get(t *testing.T) {
 	}
 	for _, tt := range cases {
 		t.Run(tt.in.String(), func(t *testing.T) {
-			path, err := l.Get(context.TODO(), tt.in)
+			path, err := l.Get(ctx, tt.in)
 			assert.NoError(t, err)
 			assert.EqualValues(t, tt.out, path)
 		})

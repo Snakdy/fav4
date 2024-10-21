@@ -13,7 +13,10 @@ import (
 	"strings"
 )
 
-var LineMatcherV2 = regexp.MustCompile(`href="?[^("|>)]*favicon[^("|>)]*\.(png|ico)`)
+var (
+	HintMatcher   = regexp.MustCompile(`.*favicon.*\.(png|ico)`)
+	LineMatcherV2 = regexp.MustCompile(`href="?[^("|>)]*favicon[^("|>)]*\.(png|ico)`)
+)
 
 var (
 	ErrNotFound      = errors.New("failed to find a favicon reference in the page source")
@@ -52,7 +55,7 @@ func (l *HeadLoader) Get(ctx context.Context, target *url.URL) (string, error) {
 		return "", err
 	}
 	for _, line := range strings.Split(string(data), "\n") {
-		if strings.Contains(line, "favicon.") {
+		if HintMatcher.MatchString(line) {
 			val := strings.TrimPrefix(strings.ReplaceAll(LineMatcherV2.FindString(line), `"`, ""), "href=")
 			if strings.HasPrefix(val, "https://") {
 				return val, nil
